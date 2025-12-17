@@ -1,5 +1,13 @@
 # NXMP Changelog
 
+## [0.9.3]
+
+### Added 
+
+- Support for FW 21.0.0 ABI changes
+- CBZ CBR file support
+- Updated mpv from 0.36 to 0.39 
+
 ## [0.9.2]
 
 ### Added
