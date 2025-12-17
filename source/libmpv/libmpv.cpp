@@ -50,10 +50,34 @@ libMpv::libMpv(const std::string &configDir) {
 	
 	mpv_set_option_string(handle, "image-display-duration", "inf");
 
-	mpv_set_option_string(handle, "hdr-compute-peak", "yes");
+	mpv_set_option_string(handle, "hdr-compute-peak", "no");
 	mpv_set_option_string(handle, "demuxer-seekable-cache", "yes");
 	mpv_set_option_string(handle, "demuxer-readahead-secs", std::to_string(configini->getDemuxCache(false)).c_str());
 	
+	
+	/* FIX FOR HIGH GPU LOAD WITH MPV > 0.36 */
+	
+	mpv_set_property_string(handle, "vo", "libmpv");
+	
+	mpv_set_option_string(handle, "correct-downscaling", "no");
+	mpv_set_option_string(handle, "linear-downscaling", "no");
+	mpv_set_option_string(handle, "sigmoid-upscaling", "no");
+
+	
+	mpv_set_option_string(handle, "scale", "bilinear");     
+	mpv_set_option_string(handle, "dscale", "bilinear");     
+	mpv_set_option_string(handle, "cscale", "bilinear");
+	mpv_set_option_string(handle, "tscale", "oversample");   
+
+	// Disabilita HDR compute peak se non necessario
+	mpv_set_option_string(handle, "hdr-compute-peak", "no");
+	
+	
+	/* END FIX FOR HIGH GPU LOAD WITH MPV > 0.36 */
+
+	// Ottimizzazioni specifiche per GPU mobile
+	mpv_set_option_string(handle, "dither-depth", "no");     // Risparmia GPU
+	mpv_set_option_string(handle, "deband", "no");           // Molto pesante
 
 	if(configini->getHWDec(false)){
 
@@ -63,12 +87,9 @@ libMpv::libMpv(const std::string &configDir) {
 	
 	}
 	
-	if(configini->getAout(false) == 0){
-		mpv_set_option_string(handle, "ao", "sdl");
 	
-	}else if(configini->getAout(false) == 1){
-		mpv_set_option_string(handle, "ao", "hos");
-	}
+	mpv_set_option_string(handle, "ao", "hos");
+	
 
 	
 	if(configini->getUseAlang(false)){
@@ -91,13 +112,7 @@ libMpv::libMpv(const std::string &configDir) {
         mpv_terminate_destroy(handle);
         return;
     }
-	
-	NXLOG::DEBUGLOG("MPV Init Renderer\n");
-	 
-	int advanced_control = 1;
-	if(configini->getEmuOverrides()){
-		advanced_control = 0;
-	} 
+
 
 	mpv_version = mpv_get_property_string(handle, "mpv-version");
 	ffmpeg_version = mpv_get_property_string(handle, "ffmpeg-version");

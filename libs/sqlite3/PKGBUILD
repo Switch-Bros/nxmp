@@ -7,16 +7,16 @@ license=('Public Domain')
 arch=('any')
 options=(!strip libtool staticlibs)
 groups=('switch-portlibs')
-source=("${url}/snapshot/sqlite-snapshot-202505081618.tar.gz")
+source=("${url}/2025/sqlite-autoconf-3510100.tar.gz")
 sha256sums=(
-  '14a0ab22111c7b009aee114b21fe39a57bdc8910357fba46b84a29a8e9d0c164'
+  '4f2445cd70479724d32ad015ec7fd37fbb6f6130013bd4bfbc80c32beb42b7e0'
 )
 
 
 build() {
 
   
-  cd "sqlite-snapshot-202505081618"
+  cd "sqlite-autoconf-3510100"
 
   source ${DEVKITPRO}/switchvars.sh
   export CFLAGS="$CFLAGS -DSQLITE_DEBUG -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION=1 -DSQLITE_OMIT_WAL -DSQLITE_OS_OTHER"
@@ -27,7 +27,7 @@ build() {
 }
 
 package() {
-  cd "sqlite-snapshot-202505081618"
+  cd "sqlite-autoconf-3510100"
 
   source /opt/devkitpro/switchvars.sh
 
